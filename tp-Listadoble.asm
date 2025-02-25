@@ -31,8 +31,8 @@ schedv: .space 32
 menu:	.ascii "Colecciones de objetos categorizados\n"
 		.ascii "====================================\n"
 		.ascii "1-Nueva categoria\n"
-		.ascii "2-Siguiente categoria\n"                      #No anda
-		.ascii "3-Categoria anterior\n"                       #No anda
+		.ascii "2-Siguiente categoria\n"                      
+		.ascii "3-Categoria anterior\n"                      
 		.ascii "4-Listar categorias\n"
 		.ascii "5-Borrar categoria actual\n"
 		.ascii "6-Anexar objeto a la categoria actual\n"
@@ -127,6 +127,38 @@ newcategory_end:
 	li $v0, 0			
 	lw $ra, 4($sp)
 	addiu $sp, $sp, 4
+	jr $ra
+	
+nextcategory:
+	lw $t0, wclist		
+	beqz $t0, er201 
+	
+	lw $t1, wclist 	
+	lw $t0, 12($t0) 		
+	
+	beq $t0, $t1, er202 	
+	sw $t0, wclist 		
+	lw $t0, 8($t0)		
+	imp_etiqueta(selCat)
+	la $a0, 0($t0)		
+	li $v0, 4 		
+	syscall 			
+	jr $ra
+
+prevcategory:
+	lw $t0, wclist		
+	beqz $t0, er201 		
+	
+	lw $t1, wclist 		
+	lw $t0, 0($t0) 		
+	
+	beq $t0, $t1, er202 	
+	sw $t0, wclist 		
+	lw $t0, 8($t0)
+	imp_etiqueta(selCat)
+	la $a0, 0($t0)		
+	li $v0, 4 		
+	syscall 			
 	jr $ra
 
 
